@@ -3,16 +3,14 @@ version: '3.5'
 services:
 
   api:
-    image: ragapi:latest
+    image: ragdemo:0.0.1
     ports:
       - 8000:8000
-    # volumes:
-    #   - ./scripts:/viki/scripts
-    #   - ./apps:/viki/apps
-    #   - ./apps/storage:/viki/apps/storage
-    # env_file:
-    #   - docker-vars.env
-    #   - docker-vars.override.env
+    volumes:
+      - ./backend:/api
+    env_file:
+      - docker-vars.env
+      # - docker-vars.override.env
     command: python3 manage.py runserver --noreload 0.0.0.0:8000 && daphne -b 0.0.0.0 -p 8000 config.asgi.application
     # command: python3 manage.py runserver 0.0.0.0:8000
     restart: on-failure
@@ -23,7 +21,7 @@ services:
       - 5432:5432
     env_file:
       - docker-vars.env
-      - docker-vars.override.env
+      # - docker-vars.override.env
     volumes:
       - ~/database/rag/postgres:/var/lib/postgresql/data
     restart: on-failure

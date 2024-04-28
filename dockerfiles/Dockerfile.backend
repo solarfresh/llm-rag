@@ -1,0 +1,24 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND="noninteractive"
+
+RUN sed -i 's/archive.ubuntu.com/tw.archive.ubuntu.com/g' /etc/apt/sources.list
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y libpq-dev python3-pip \
+    && apt-get clean \
+    && apt-get autoremove
+
+COPY ./requirements/backend ./requirements
+
+RUN python3 -m pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r ./requirements
+
+RUN adduser --disabled-password demo
+
+COPY ./backend /api
+
+RUN chown -R demo:demo /api
+
+WORKDIR /api
+USER demo
