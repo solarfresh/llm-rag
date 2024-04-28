@@ -4,7 +4,7 @@ from . import models, serializers
 
 
 class KnowledgeInfoView(
-    generics.ListAPIView,
+    generics.ListCreateAPIView,
     generics.GenericAPIView
 ):
     queryset = models.KnowledgeInfoModel.objects.all()

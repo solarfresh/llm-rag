@@ -185,35 +185,6 @@ EMBEDDING_MODEL_NAME = os.getenv(
 CHUNK_SIZE = int(os.getenv('CHUNK_SIZE', '200'))
 CHUNK_OVERLAP = int(os.getenv('CHUNK_OVERLAP', '50'))
 
-
-# ==================
-#        SEARCH
-# ==================
-
-# search
-OPENSEARCH = 'opensearch'
-ELASTICSEARCH = 'elasticsearch'
-
-SEARCH_ALL = {
-    OPENSEARCH: {
-        'opensearch_url': os.getenv(
-            'OPENSEARCH_URL', 'opensearch-node1:9200'
-        )
-    }
-}
-
-ENGINE_NAME = os.getenv("SEARCH_ENGINE", OPENSEARCH)
-SEARCH_ENGINE = {
-    "default": SEARCH_ALL[ENGINE_NAME]
-}
-
-DSL_MODULE_MAP = {
-    OPENSEARCH: "django_opensearch_dsl",
-    # ELASTICSEARCH: "django_elasticsearch_dsl"
-}
-SEARCH_DSL_MODULE = DSL_MODULE_MAP[ENGINE_NAME]
-
-
 # ==================
 #    OPENSEARCH
 # ==================
@@ -249,36 +220,4 @@ OPENSEARCH_DSL_CUSTOM_CONFIG = {
             'number_of_replicas': 0
         }
     },
-}
-
-# TODO(Weber): This should be remove
-CUSTOM_MAPPINGS = {
-    "settings": {
-        "index.knn": True,
-        "default_pipeline": "nlp-ingest-pipeline"
-    },
-    "mappings": {
-        'properties': {
-            'text': {
-                'type': 'text',
-            },
-            'embedding': {
-                "type": os.getenv('EMBEDDING_TYPE', 'knn_vector'),
-                "dimension": int(os.getenv('EMBEDDING_DIM', '768')),
-                "method": {
-                    "name": os.getenv('EMBEDDING_METHOD_NAME', 'hnsw'),
-                    "space_type": os.getenv(
-                        'EMBEDDING_METHOD_SPACE_TYPE', 'l2'),
-                    "engine": os.getenv('EMBEDDING_METHOD_ENGINE', 'nmslib'),
-                    "parameters": {
-                        "ef_construction": int(
-                            os.getenv(
-                                'EMBEDDING_METHOD_EF_CONSTRUCTION', '512')
-                        ),
-                        "m": int(os.getenv('EMBEDDING_METHOD_M', '16')),
-                    },
-                },
-            }
-        }
-    }
 }

@@ -1,6 +1,6 @@
 import uuid
-from typing import OrderedDict
 
+from django.core.management import call_command
 from django.db import models
 from django_opensearch_dsl import Document
 from django_opensearch_dsl import fields as documents
@@ -21,24 +21,6 @@ class VectorField(
         super(VectorField, self).__init__(attr=attr, **kwargs)
 
 
-class KnowledgeInfoModel(models.Model):
-
-    knowledge_set_id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    name = models.CharField(
-        max_length=64,
-        null=False
-    )
-    description = models.TextField(null=True)
-    create_at = models.DateTimeField(default=datetime.now)
-    modified_at = models.DateTimeField(blank=True, null=True)
-
-    def save(self, **kwargs):
-        super().save(**kwargs)
-
 class KnowledgeSetDocument:
 
     def __new__(cls, index_name):
@@ -55,7 +37,6 @@ class KnowledgeSetDocument:
 
             class Meta:
                 managed = False
-
 
         @registry.register_document
         class KnowledgeSetDocumentTemplate(Document):
@@ -80,3 +61,24 @@ class KnowledgeSetDocument:
                 name = index_name
 
         return KnowledgeSetDocumentTemplate
+
+
+class KnowledgeInfoModel(models.Model):
+
+    knowledge_set_id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    name = models.CharField(
+        max_length=64,
+        null=False
+    )
+    description = models.TextField(null=True)
+    create_at = models.DateTimeField(default=datetime.now)
+    modified_at = models.DateTimeField(blank=True, null=True)
+
+    def save(self, **kwargs):
+        _ = KnowledgeSetDocument(str(self.knowledge_set_id))
+        call_command('opensearch', 'index', 'create', '--force')
+        super().save(**kwargs)
