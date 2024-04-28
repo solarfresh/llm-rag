@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   api:
-    image: ragdemo:0.0.1
+    image: ragdemo:0.0.3
     ports:
       - 8000:8000
     volumes:
@@ -14,6 +14,9 @@ services:
     command: python manage.py runserver --noreload 0.0.0.0:8000 && daphne -b 0.0.0.0 -p 8000 config.asgi.application
     # command: python3 manage.py runserver 0.0.0.0:8000
     restart: on-failure
+    depends_on:
+      - postgres
+      - opensearch-node1
 
   postgres:
     image: postgres:16.2-alpine
@@ -49,3 +52,4 @@ services:
     ports:
       - 9200:9200
       - 9600:9600 # required for Performance Analyzer
+    restart: on-failure
