@@ -14,6 +14,7 @@ COPY ./requirements/backend ./requirements
 RUN python3 -m pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r ./requirements
 
+RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN adduser --disabled-password demo
 
 COPY ./backend /api
