@@ -1,0 +1,53 @@
+version: '3.5'
+
+services:
+
+  api:
+    image: ragapi:latest
+    ports:
+      - 8000:8000
+    # volumes:
+    #   - ./scripts:/viki/scripts
+    #   - ./apps:/viki/apps
+    #   - ./apps/storage:/viki/apps/storage
+    # env_file:
+    #   - docker-vars.env
+    #   - docker-vars.override.env
+    command: python3 manage.py runserver --noreload 0.0.0.0:8000 && daphne -b 0.0.0.0 -p 8000 config.asgi.application
+    # command: python3 manage.py runserver 0.0.0.0:8000
+    restart: on-failure
+
+  postgres:
+    image: postgres:16.2-alpine
+    ports:
+      - 5432:5432
+    env_file:
+      - docker-vars.env
+      - docker-vars.override.env
+    volumes:
+      - ~/database/rag/postgres:/var/lib/postgresql/data
+    restart: on-failure
+
+  opensearch-node1:
+    image: opensearchproject/opensearch:2.13.0
+    container_name: opensearch-node1
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node1
+      - discovery.seed_hosts=opensearch-node1
+      - cluster.initial_cluster_manager_nodes=opensearch-node1
+      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - "DISABLE_SECURITY_PLUGIN=true" # TODO: to check other better solutions
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - ~/database/rag/opensearch1:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600 # required for Performance Analyzer
