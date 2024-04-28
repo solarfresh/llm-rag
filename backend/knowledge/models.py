@@ -5,7 +5,7 @@ from django.utils import timezone as datetime
 from django.utils.translation import gettext_lazy as _
 
 
-class KnowledgeSetModel(models.Model):
+class KnowledgeInfoModel(models.Model):
 
     knowledge_set_id = models.UUIDField(
         primary_key=True,
