@@ -65,6 +65,14 @@ class KnowledgeSetDocument:
 
 class KnowledgeInfoModel(models.Model):
 
+    class OpenSearchManager(models.Manager):
+        def create(self, **kwargs):
+            instance = super().create(**kwargs)
+            _ = KnowledgeSetDocument(str(instance.knowledge_set_id))
+            call_command('opensearch', 'index', 'create', '--force')
+            return instance
+
+    objects = OpenSearchManager()
     knowledge_set_id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
@@ -77,8 +85,3 @@ class KnowledgeInfoModel(models.Model):
     description = models.TextField(null=True)
     create_at = models.DateTimeField(default=datetime.now)
     modified_at = models.DateTimeField(blank=True, null=True)
-
-    def save(self, **kwargs):
-        _ = KnowledgeSetDocument(str(self.knowledge_set_id))
-        call_command('opensearch', 'index', 'create', '--force')
-        super().save(**kwargs)
