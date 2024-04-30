@@ -22,6 +22,8 @@ services:
   celery:
     <<: *api
     ports: []
+    volumes:
+      - ./backend:/api
     env_file:
       - docker-vars.env
       # - docker-vars.override.env
@@ -49,7 +51,6 @@ services:
 
   opensearch-node1:
     image: opensearchproject/opensearch:2.13.0
-    container_name: opensearch-node1
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch-node1
