@@ -7,3 +7,4 @@ djangorestframework==3.14.0
 langchain==0.1.16
 psycopg[c]==3.1.18
 tzdata==2024.1
+unstructured==0.11.8
