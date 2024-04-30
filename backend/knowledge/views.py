@@ -1,3 +1,6 @@
+import logging
+
+from django.conf import settings
 from langchain_community.document_loaders.url import UnstructuredURLLoader
 from langchain_community.vectorstores.opensearch_vector_search import OpenSearchVectorSearch
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -23,6 +26,7 @@ class KnowdegeSetHTMLLoaderView(
 
     def post(self, request, *args, **kwargs):
         urls = request.data.get('urls', None)
+        knowledge_set_id = kwargs.get('knowledge_set_id')
         if urls is None:
             return Response({
                 "message": "urls can not be empty."
@@ -35,6 +39,15 @@ class KnowdegeSetHTMLLoaderView(
             chunk_overlap=0
         )
         documents = splitter.split_documents(data)
+
+        opensearch_url = settings.OPENSEARCH_DSL.get('default').get('hosts')
+
+        # OpenSearchVectorSearch.from_documents(
+        #     documents=documents,
+        #     embedding=None,
+        #     opensearch_url=opensearch_url,
+        #     index_name=knowledge_set_id
+        # )
 
         return Response([
             {

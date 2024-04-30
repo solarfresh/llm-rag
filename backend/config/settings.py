@@ -173,17 +173,22 @@ REST_FRAMEWORK = {
 }
 
 # ==================
-#        LLM
+#    CELERY
 # ==================
 
-# huggingface models
-EMBEDDING_MODEL_NAME = os.getenv(
-    'EMBEDDING_MODEL_NAME', 'paraphrase-multilingual-mpnet-base-v2'
-)
-
-# test splitter
-CHUNK_SIZE = int(os.getenv('CHUNK_SIZE', '200'))
-CHUNK_OVERLAP = int(os.getenv('CHUNK_OVERLAP', '50'))
+CELERY_CONFIG = {
+    'name': 'async_task',
+    'namespace': 'CELERY',
+    'broker': os.getenv(
+        'CELERY_BROKER_URL', 'amqp://guest:guest@rabbitmq:5672//'
+    ),
+    'backend': os.getenv(
+        'CELERY_RESULT_BACKEND', 'rpc://'
+    ),
+    'task_serializer': 'pickle',
+    'result_serializer': 'pickle',
+    'accept_content': ['pickle']
+}
 
 # ==================
 #    OPENSEARCH
