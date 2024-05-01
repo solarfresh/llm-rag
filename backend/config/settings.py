@@ -234,6 +234,7 @@ OPENSEARCH_DSL_CUSTOM_CONFIG = {
 # ==================
 
 EMBEDDINGS_PLATFORM = os.getenv('EMBEDDINGS_PLATFORM', 'hf')
+LARGE_LANGUAGE_MODEL_PLATFORM = os.getenv('LARGE_LANGUAGE_MODEL_PLATFORM', 'hf')
 
 # ==================
 #    AZURE
@@ -248,7 +249,11 @@ AZURE_OPENAI_EMBEDDING_MODEL = os.getenv(
 # ==================
 
 HUGGINGFACE_EMBEDDING_MODEL = os.getenv(
-    'HUGGINGFACE_EMBEDDING_MODEL', 'Salesforce/SFR-Embedding-Mistral')
+    'HUGGINGFACE_EMBEDDING_MODEL', 'stoage/models/SFR-Embedding-Mistral')
 HUGGINGFACE_EMBEDDING_MODEL_CONFIG = {
     'device': os.getenv('INFERENCE_DEVICE', 'gpu')
 }
+HUGGINGFACE_LARGE_LANGUAGE_MODEL = os.getenv(
+    'HUGGINGFACE_LARGE_LANGUAGE_MODEL',
+    'stoage/models/Meta-Llama-3-8B'
+)
