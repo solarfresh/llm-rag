@@ -19,7 +19,8 @@ from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
-    path("api/knowledge/", include("knowledge.urls")),
+    path("api/docs/", include_docs_urls(title='Demo API')),
     path("api/healthcheck/", include("healthcheck.urls")),
-    path("api/docs/", include_docs_urls(title='Demo API'))
+    path("api/knowledge/", include("knowledge.urls")),
+    path("api/llm/", include("llm.urls"))
 ]

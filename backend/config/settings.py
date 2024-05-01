@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django_opensearch_dsl",
     "healthcheck",
     "knowledge",
+    "llm",
     "utils"
 ]
 
