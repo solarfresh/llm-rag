@@ -17,7 +17,7 @@ class Embeddings:
                 model_kwargs=settings.HUGGINGFACE_EMBEDDING_MODEL_CONFIG
             )
         else:
-            raise ValueError('The argument platform must be assigned.')
+            return None
 
 
 embedding = Embeddings(platform=settings.EMBEDDINGS_PLATFORM)

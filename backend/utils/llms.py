@@ -10,11 +10,14 @@ class LargeLanguageModels:
         if platform == 'hf':
             return cls.build_hf_model()
         else:
-            raise ValueError('The argument platform must be assigned.')
+            return None
 
     @classmethod
     def build_hf_model(cls):
         import torch
+
+        if settings.HUGGINGFACE_LARGE_LANGUAGE_MODEL is None:
+            return None
 
         pipe = pipeline(
             "text-generation",

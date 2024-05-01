@@ -15,6 +15,9 @@ class HTMLLoaderTask(celery_task.Task):
     name = 'html_loader_task'
 
     def run(self, knowledge_set_id: str, urls: List[str]):
+        if embedding is None:
+            return None
+
         loader = UnstructuredURLLoader(urls=urls)
         data = loader.load()
         splitter = RecursiveCharacterTextSplitter(
