@@ -20,7 +20,7 @@ class LargeLanguageModels:
             "text-generation",
             model=settings.HUGGINGFACE_LARGE_LANGUAGE_MODEL,
             model_kwargs={"torch_dtype": torch.bfloat16},
-            device_map="auto"
+            device_map="auto",
         )
 
         return HuggingFacePipeline(pipeline=pipe)

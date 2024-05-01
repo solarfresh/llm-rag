@@ -20,4 +20,4 @@ class Embeddings:
             raise ValueError('The argument platform must be assigned.')
 
 
-embeddings = Embeddings(platform=settings.EMBEDDINGS_PLATFORM)
+embedding = Embeddings(platform=settings.EMBEDDINGS_PLATFORM)

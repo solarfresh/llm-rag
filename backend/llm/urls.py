@@ -1,12 +1,12 @@
 from django.urls import path
 
-# from . import views
+from . import views
 
 
 urlpatterns = [
-    # path(
-    #     'info',
-    #     views.KnowledgeInfoView.as_view(),
-    #     name='knowledge-info'
-    # )
+    path(
+        'inference',
+        views.LLMInferenceView.as_view(),
+        name='llm-inference'
+    )
 ]

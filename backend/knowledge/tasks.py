@@ -7,7 +7,7 @@ from langchain_community.document_loaders.url import UnstructuredURLLoader
 from langchain_community.vectorstores.opensearch_vector_search import OpenSearchVectorSearch
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from utils.embeddings import embeddings
+from utils.embeddings import embedding
 
 
 class HTMLLoaderTask(celery_task.Task):
@@ -26,8 +26,8 @@ class HTMLLoaderTask(celery_task.Task):
         opensearch_url = settings.OPENSEARCH_DSL.get('default').get('hosts')
 
         OpenSearchVectorSearch.from_documents(
-            documents=documents[:5],
-            embedding=embeddings,
+            documents=documents,
+            embedding=embedding,
             opensearch_url=opensearch_url,
             index_name=knowledge_set_id
         )
