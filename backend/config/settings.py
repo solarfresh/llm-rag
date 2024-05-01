@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_opensearch_dsl",
     "healthcheck",
-    "knowledge"
+    "knowledge",
+    "llm",
+    "utils"
 ]
 
 
@@ -173,17 +175,22 @@ REST_FRAMEWORK = {
 }
 
 # ==================
-#        LLM
+#    CELERY
 # ==================
 
-# huggingface models
-EMBEDDING_MODEL_NAME = os.getenv(
-    'EMBEDDING_MODEL_NAME', 'paraphrase-multilingual-mpnet-base-v2'
-)
-
-# test splitter
-CHUNK_SIZE = int(os.getenv('CHUNK_SIZE', '200'))
-CHUNK_OVERLAP = int(os.getenv('CHUNK_OVERLAP', '50'))
+CELERY_CONFIG = {
+    'name': 'async_task',
+    'namespace': 'CELERY',
+    'broker': os.getenv(
+        'CELERY_BROKER_URL', 'amqp://guest:guest@rabbitmq:5672//'
+    ),
+    'backend': os.getenv(
+        'CELERY_RESULT_BACKEND', 'rpc://'
+    ),
+    'task_serializer': 'pickle',
+    'result_serializer': 'pickle',
+    'accept_content': ['pickle']
+}
 
 # ==================
 #    OPENSEARCH
@@ -221,3 +228,32 @@ OPENSEARCH_DSL_CUSTOM_CONFIG = {
         }
     },
 }
+
+# ==================
+#    PLATFORM
+# ==================
+
+EMBEDDINGS_PLATFORM = os.getenv('EMBEDDINGS_PLATFORM', '')
+LARGE_LANGUAGE_MODEL_PLATFORM = os.getenv('LARGE_LANGUAGE_MODEL_PLATFORM', '')
+
+# ==================
+#    AZURE
+# ==================
+
+AZURE_OPENAI_API_KEY = os.getenv('AZURE_OPENAI_API_KEY', '')
+AZURE_OPENAI_EMBEDDING_MODEL = os.getenv(
+    'AZURE_OPENAI_EMBEDDING_MODEL', 'text-embedding-ada-002')
+
+# ==================
+#    HUGGINGFACE
+# ==================
+
+HUGGINGFACE_EMBEDDING_MODEL = os.getenv(
+    'HUGGINGFACE_EMBEDDING_MODEL', 'stoage/models/SFR-Embedding-Mistral')
+HUGGINGFACE_EMBEDDING_MODEL_CONFIG = {
+    'device': os.getenv('INFERENCE_DEVICE', 'gpu')
+}
+HUGGINGFACE_LARGE_LANGUAGE_MODEL = os.getenv(
+    'HUGGINGFACE_LARGE_LANGUAGE_MODEL',
+    'stoage/models/Meta-Llama-3-8B'
+)

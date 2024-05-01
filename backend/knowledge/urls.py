@@ -8,5 +8,10 @@ urlpatterns = [
         'info',
         views.KnowledgeInfoView.as_view(),
         name='knowledge-info'
+    ),
+    path(
+        '<str:knowledge_set_id>/html',
+        views.KnowdegeSetHTMLLoaderView.as_view(),
+        name='knowledge-set-html'
     )
 ]

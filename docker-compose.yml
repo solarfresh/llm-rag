@@ -2,8 +2,8 @@ version: '3.5'
 
 services:
 
-  api:
-    image: ragdemo:0.0.3
+  api: &api
+    image: ragdemo:0.0.8
     ports:
       - 8000:8000
     volumes:
@@ -16,7 +16,28 @@ services:
     restart: on-failure
     depends_on:
       - postgres
+      - rabbitmq
       - opensearch-node1
+
+  celery:
+    <<: *api
+    ports: []
+    volumes:
+      - ./backend:/api
+    env_file:
+      - docker-vars.env
+      # - docker-vars.override.env
+    command: celery -A config.celery_app worker --pool=solo --loglevel=info
+    restart: on-failure
+
+  rabbitmq:
+    image: rabbitmq:3.13.0-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - docker-vars.env
+    restart: on-failure
 
   postgres:
     image: postgres:16.2-alpine
@@ -31,7 +52,6 @@ services:
 
   opensearch-node1:
     image: opensearchproject/opensearch:2.13.0
-    container_name: opensearch-node1
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch-node1

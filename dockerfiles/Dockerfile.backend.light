@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
@@ -9,7 +9,7 @@ RUN apt-get update \
     && apt-get clean \
     && apt-get autoremove
 
-COPY ./requirements/backend ./requirements
+COPY ./requirements/backend.light ./requirements
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r ./requirements
