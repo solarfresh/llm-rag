@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   api: &api
-    image: ragdemo:0.0.5
+    image: ragdemo:0.0.6
     ports:
       - 8000:8000
     volumes:

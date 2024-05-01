@@ -1,5 +1,3 @@
-import logging
-
 from typing import List
 
 from config.celery_app import celery_task
@@ -8,6 +6,8 @@ from django.conf import settings
 from langchain_community.document_loaders.url import UnstructuredURLLoader
 from langchain_community.vectorstores.opensearch_vector_search import OpenSearchVectorSearch
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from utils.embeddings import embeddings
 
 
 class HTMLLoaderTask(celery_task.Task):
@@ -25,16 +25,12 @@ class HTMLLoaderTask(celery_task.Task):
 
         opensearch_url = settings.OPENSEARCH_DSL.get('default').get('hosts')
 
-        # OpenSearchVectorSearch.from_documents(
-        #     documents=documents,
-        #     embedding=None,
-        #     opensearch_url=opensearch_url,
-        #     index_name=knowledge_set_id
-        # )
-
-        for doc in documents:
-            logging.info('=================')
-            logging.info(doc.page_content)
+        OpenSearchVectorSearch.from_documents(
+            documents=documents[:5],
+            embedding=embeddings,
+            opensearch_url=opensearch_url,
+            index_name=knowledge_set_id
+        )
 
 
 task_classes = [

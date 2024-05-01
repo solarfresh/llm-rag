@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_opensearch_dsl",
     "healthcheck",
-    "knowledge"
+    "knowledge",
+    "utils"
 ]
 
 
@@ -225,4 +226,28 @@ OPENSEARCH_DSL_CUSTOM_CONFIG = {
             'number_of_replicas': 0
         }
     },
+}
+
+# ==================
+#    PLATFORM
+# ==================
+
+EMBEDDINGS_PLATFORM = os.getenv('EMBEDDINGS_PLATFORM', 'hf')
+
+# ==================
+#    AZURE
+# ==================
+
+AZURE_OPENAI_API_KEY = os.getenv('AZURE_OPENAI_API_KEY', '')
+AZURE_OPENAI_EMBEDDING_MODEL = os.getenv(
+    'AZURE_OPENAI_EMBEDDING_MODEL', 'text-embedding-ada-002')
+
+# ==================
+#    HUGGINGFACE
+# ==================
+
+HUGGINGFACE_EMBEDDING_MODEL = os.getenv(
+    'HUGGINGFACE_EMBEDDING_MODEL', 'Salesforce/SFR-Embedding-Mistral')
+HUGGINGFACE_EMBEDDING_MODEL_CONFIG = {
+    'device': os.getenv('INFERENCE_DEVICE', 'gpu')
 }
