@@ -1,0 +1,12 @@
+celery==5.3.6
+coreapi==2.3.3
+daphne==4.1.0
+django==5.0.3
+django-opensearch-dsl==0.6.1
+django-cors-headers==4.3.1
+djangorestframework==3.14.0
+langchain==0.1.16
+langchain_openai==0.1.4
+psycopg[c]==3.1.18
+tzdata==2024.1
+unstructured==0.11.8
