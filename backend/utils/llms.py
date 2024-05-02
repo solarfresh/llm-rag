@@ -11,7 +11,7 @@ class LargeLanguageModels:
         if platform == 'azure':
             return AzureOpenAI(
                 model_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL
-            )
+            ).invoke
         elif platform == 'hf':
             return cls.build_hf_model()
         else:
