@@ -1,6 +1,5 @@
 from typing import Any
 
-import openai
 from django.conf import settings
 from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain_openai import AzureOpenAI
@@ -11,7 +10,6 @@ class LargeLanguageModels:
     def __new__(cls, platform) -> Any:
         if platform == 'azure':
             return AzureOpenAI(
-                client=openai.ChatCompletion(),
                 deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL
             ).invoke
         elif platform == 'hf':
