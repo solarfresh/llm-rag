@@ -2,12 +2,17 @@ from typing import Any
 
 from django.conf import settings
 from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
+from langchain_openai import AzureOpenAI
 from transformers import pipeline
 
 
 class LargeLanguageModels:
     def __new__(cls, platform) -> Any:
-        if platform == 'hf':
+        if platform == 'azure':
+            return AzureOpenAI(
+                model_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL
+            )
+        elif platform == 'hf':
             return cls.build_hf_model()
         else:
             return None
