@@ -1,4 +1,14 @@
 services:
+  streamlit:
+    image: ragdemofe:0.0.1
+    ports:
+      - 8501:8501
+    volumes:
+      - ./frontend:/streamlit
+    environment:
+      - API_BASE_URL=api
+      - OPENSEARCH_INDEX
+
   api: &api
     image: ragdemo:0.0.8
     ports:

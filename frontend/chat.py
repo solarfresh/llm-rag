@@ -6,8 +6,9 @@ from urllib.parse import urljoin
 import streamlit as st
 
 API_BASE_URL = os.environ.get('API_BASE_URL', '')
+OPENSEARCH_INDEX = os.environ.get('OPENSEARCH_INDEX', '')
 LLM_ENDPOINT = '/api/llm/completion'
-SEARCH_ENDPOINT = '/api/knowledge/c6b05fac-aed0-4420-802b-da2173598b6e/search'
+SEARCH_ENDPOINT = f'/api/knowledge/{OPENSEARCH_INDEX}/search'
 if not API_BASE_URL:
     raise ValueError('The base URL of API must be set...')
 
