@@ -79,8 +79,7 @@ class HTMLSitemapLoaderTask(celery_task.Task):
             link_url = link.get('href')
             if link_url:
                 absolute_link = urljoin(url, link_url)
-                if absolute_link.startswith(domain):
-                    links.add(absolute_link)
+                links.add(absolute_link)
 
         return links
 

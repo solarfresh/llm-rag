@@ -10,11 +10,13 @@ class LargeLanguageModels:
     def __new__(cls, platform) -> Any:
         if platform == 'azure':
             return AzureOpenAI(
-                deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL
+                deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL,
+                max_tokens=2048
             ).invoke
         elif platform == 'azurechat':
             return AzureChatOpenAI(
-                deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL
+                deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL,
+                max_tokens=2048
             ).invoke
         elif platform == 'hf':
             return cls.build_hf_model()

@@ -85,9 +85,9 @@ class KnowdegeSetSitemapLoaderView(
     def post(self, request, *args, **kwargs):
         knowledge_set_id = kwargs.get('knowledge_set_id')
         domain = request.data.get('domain', None)
-        if urls is None:
+        if domain is None:
             return Response({
-                "message": "urls can not be empty."
+                "message": "domain can not be empty."
             }, status=status.HTTP_400_BAD_REQUEST)
 
         ap.tasks['html_sitemap_loader_task'].apply_async(
