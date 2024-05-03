@@ -2,7 +2,7 @@ from typing import Any
 
 from django.conf import settings
 from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
-from langchain_openai import AzureOpenAI
+from langchain_openai import AzureOpenAI, AzureChatOpenAI
 from transformers import pipeline
 
 
@@ -10,6 +10,10 @@ class LargeLanguageModels:
     def __new__(cls, platform) -> Any:
         if platform == 'azure':
             return AzureOpenAI(
+                deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL
+            ).invoke
+        elif platform == 'azurechat':
+            return AzureChatOpenAI(
                 deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL
             ).invoke
         elif platform == 'hf':
