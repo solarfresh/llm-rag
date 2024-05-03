@@ -18,5 +18,10 @@ urlpatterns = [
         '<str:knowledge_set_id>/html',
         views.KnowdegeSetHTMLLoaderView.as_view(),
         name='knowledge-set-html'
-    )
+    ),
+    path(
+        '<str:knowledge_set_id>/sitemap',
+        views.KnowdegeSetSitemapLoaderView.as_view(),
+        name='knowledge-set-sitemap'
+    ),
 ]

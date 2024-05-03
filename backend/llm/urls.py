@@ -5,8 +5,13 @@ from . import views
 
 urlpatterns = [
     path(
-        'inference',
-        views.LLMInferenceView.as_view(),
-        name='llm-inference'
-    )
+        'completion',
+        views.LLMCompletionView.as_view(),
+        name='llm-completion'
+    ),
+    path(
+        'chatcompletion',
+        views.LLMChatCompletionView.as_view(),
+        name='llm-chat-completion'
+    ),
 ]
