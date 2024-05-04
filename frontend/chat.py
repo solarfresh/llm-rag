@@ -7,7 +7,7 @@ import streamlit as st
 
 API_BASE_URL = os.environ.get('API_BASE_URL', '')
 OPENSEARCH_INDEX = os.environ.get('OPENSEARCH_INDEX', '')
-LLM_ENDPOINT = '/api/llm/completion'
+LLM_ENDPOINT = '/api/llm/completionstream'
 SEARCH_ENDPOINT = f'/api/knowledge/{OPENSEARCH_INDEX}/search'
 if not API_BASE_URL:
     raise ValueError('The base URL of API must be set...')
@@ -83,29 +83,22 @@ def response_llm():
             json={
                 "messages": messages
             },
+            stream=True,
             timeout=120
         )
 
-        results = [
-            res[-1]
-            for res in response.json().get('result', '')
-            if res[0] == 'content'
-        ]
+        for line in response.iter_content(chunk_size=10):
+            if line:
+                yield line.decode('utf-8')
     else:
-        results = []
-
-    return results
+        yield ''
 
 
 def response_generator():
     if not st.session_state.messages:
-        data = ['很榮幸有機會與您交流 Tableau 這套工具，歡迎討論任何相關問題。']
+        yield '很榮幸有機會與您交流 Tableau 這套工具，歡迎討論任何相關問題。'
     else:
-        data = response_llm()
-
-    for word in data[0].split(' '):
-        yield word + " "
-        time.sleep(0.05)
+        yield response_llm()
 
 
 st.title("Tableau 小博士")
