@@ -103,7 +103,7 @@ def response_generator():
     else:
         data = response_llm()
 
-    for word in data[0].split():
+    for word in data[0].split(' '):
         yield word + " "
         time.sleep(0.05)
 
