@@ -27,24 +27,38 @@ def response_search(query):
         timeout=60
     )
 
+    results = response.json().get('results', [])
     information = '\n'.join([
         f'{idx}: {res["page_content"]}'
-        for idx, res in enumerate(response.json().get('results', []))
+        for idx, res in enumerate(results)
+    ])
+    references = '\n'.join([
+        f'- {res["source"]}'
+        for res in results
     ])
 
     if not information:
-        return []
+        return [
+            {
+                "role": "system",
+                "content": "為了尋找不到問題表示遺憾，並建議問題相關的提示詞。"
+            }
+        ], None
     else:
         return [
             {
-                "role": "assistant",
-                "content": "以下是找到的資訊:\n{}".format(information)
+                "role": "system",
+                "content": f"以下是搜尋到的資訊:\n{information}\n需要依照下面原則回答:"
             },
             {
-                "role": "user",
-                "content": "用中文總結之後，列出處理方法的步驟。"
+                "role": "system",
+                "content": "1. 不能夠回答搜尋到的資訊以外的內容。"
+            },
+            {
+                "role": "system",
+                "content": "2. 如果搜尋到的資訊不存在相關內容，詢問一個與內容相關的問題。"
             }
-        ]
+        ], references
 
 
 def response_llm():
@@ -55,15 +69,11 @@ def response_llm():
         },
         {
             "role": "system",
-            "content": "1. 回答的主要語言是中文"
+            "content": "1. 回答的主要語言是正體中文"
         },
         {
             "role": "system",
             "content": "2. 回答必須是簡單並且容易理解"
-        },
-        {
-            "role": "system",
-            "content": "3. 需要條列操作 Tableau 的步驟"
         }
     ]
 
@@ -72,9 +82,8 @@ def response_llm():
     else:
         history = st.session_state.messages[-10:]
 
-    query = st.session_state.messages[-1]
-
-    information = response_search(query)
+    query_message = st.session_state.messages[-1]
+    information, references = response_search(query_message['content'])
 
     messages = system_messages + history + information
     if messages:
@@ -92,6 +101,7 @@ def response_llm():
                 yield line.decode('utf-8')
                 time.sleep(.1)
 
+        yield f'### 以下為參考資訊來源:\n{references}'
     else:
         yield ''
 
@@ -100,7 +110,8 @@ def response_generator():
     if not st.session_state.messages:
         yield '很榮幸有機會與您交流 Tableau 這套工具，歡迎討論任何相關問題。'
     else:
-        yield response_llm()
+        for word in response_llm():
+            yield word
 
 
 st.title("Tableau 小博士")

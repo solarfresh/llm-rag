@@ -49,9 +49,10 @@ class KnowledgeSetQueryView(
                 'results': [
                     {
                         'page_content': doc[0].page_content,
-                        'score': doc[1]
+                        'score': doc[1],
+                        'source': doc[0].metadata['source']
                     } for doc in documents
-                ],
+                ]
             },
             status=status.HTTP_200_OK
         )
