@@ -1,0 +1,10 @@
+# Test and Linter
+bandit
+dvc
+dvc-ssh
+flake8
+mypy
+pycodestyle
+pylint
+pylint-django
+pytest
