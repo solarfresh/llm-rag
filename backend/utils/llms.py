@@ -40,4 +40,17 @@ class LargeLanguageModels:
         return HuggingFacePipeline(pipeline=pipe)
 
 
+class LargeLanguageModelsStream:
+    def __new__(cls, platform) -> Any:
+        if platform == 'azurechat':
+            return AzureChatOpenAI(
+                deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL,
+                max_tokens=2048,
+                streaming=True
+            ).stream
+        else:
+            return None
+
 llm = LargeLanguageModels(platform=settings.LARGE_LANGUAGE_MODEL_PLATFORM)
+llm_stream = LargeLanguageModelsStream(
+    platform=settings.LARGE_LANGUAGE_MODEL_PLATFORM)
