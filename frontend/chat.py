@@ -90,6 +90,8 @@ def response_llm():
         for line in response.iter_content(chunk_size=10):
             if line:
                 yield line.decode('utf-8')
+                time.sleep(.1)
+
     else:
         yield ''
 
