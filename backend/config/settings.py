@@ -249,6 +249,16 @@ AZURE_OPENAI_LARGE_LANGUAGE_MODEL = os.getenv(
 )
 
 # ==================
+#    GCP
+# ==================
+
+GCP_PROJECT_ID = os.getenv(
+    'GCP_PROJECT_ID', ''
+)
+VERTEXAI_EMBEDDING_MODEL = os.getenv(
+    'VERTEXAI_EMBEDDING_MODEL', 'textembedding-gecko-multilingual')
+
+# ==================
 #    HUGGINGFACE
 # ==================
 

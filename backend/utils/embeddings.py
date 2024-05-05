@@ -3,7 +3,7 @@ from typing import Any
 from django.conf import settings
 from langchain_openai.embeddings.azure import AzureOpenAIEmbeddings
 from langchain_community.embeddings.huggingface import HuggingFaceEmbeddings
-from openai import embeddings
+from langchain_google_vertexai import VertexAIEmbeddings
 
 
 class Embeddings:
@@ -11,6 +11,11 @@ class Embeddings:
         if platform == 'azure':
             return AzureOpenAIEmbeddings(
                 model=settings.AZURE_OPENAI_EMBEDDING_MODEL)
+        elif platform == 'gcp':
+            return VertexAIEmbeddings(
+                model_name=settings.VERTEXAI_EMBEDDING_MODEL,
+                project=settings.GCP_PROJECT_ID
+            )
         elif platform == 'hf':
             return HuggingFaceEmbeddings(
                 model_name=settings.HUGGINGFACE_EMBEDDING_MODEL,
