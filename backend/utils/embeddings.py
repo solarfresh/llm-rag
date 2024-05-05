@@ -11,7 +11,7 @@ class Embeddings:
         if platform == 'azure':
             return AzureOpenAIEmbeddings(
                 model=settings.AZURE_OPENAI_EMBEDDING_MODEL)
-        elif platform == 'gcp':
+        elif platform == 'vertexai':
             return VertexAIEmbeddings(
                 model_name=settings.VERTEXAI_EMBEDDING_MODEL,
                 project=settings.GCP_PROJECT_ID
