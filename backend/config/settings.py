@@ -257,6 +257,10 @@ GCP_PROJECT_ID = os.getenv(
 )
 VERTEXAI_EMBEDDING_MODEL = os.getenv(
     'VERTEXAI_EMBEDDING_MODEL', 'textembedding-gecko-multilingual')
+VERTEXAI_LARGE_LANGUAGE_MODEL_ENDPOINT = os.getenv(
+    'VERTEXAI_LARGE_LANGUAGE_MODEL_ENDPOINT',
+    ''
+)
 
 # ==================
 #    HUGGINGFACE

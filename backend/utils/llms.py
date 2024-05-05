@@ -3,6 +3,7 @@ from typing import Any
 from django.conf import settings
 from langchain_community.llms.huggingface_pipeline import HuggingFacePipeline
 from langchain_openai import AzureOpenAI, AzureChatOpenAI
+from langchain_google_vertexai import VertexAIModelGarden
 from transformers import pipeline
 
 
@@ -18,6 +19,18 @@ class LargeLanguageModels:
                 deployment_name=settings.AZURE_OPENAI_LARGE_LANGUAGE_MODEL,
                 max_tokens=2048
             ).invoke
+        elif platform == 'vertexai':
+            return VertexAIModelGarden(
+                endpoint_id=settings.VERTEXAI_LARGE_LANGUAGE_MODEL_ENDPOINT,
+                project=settings.GCP_PROJECT_ID,
+                allowed_model_args=[
+                    "temperature",
+                    "max_tokens",
+                    "top_p",
+                    "top_k",
+                    "raw_response"
+                ]
+            )
         elif platform == 'hf':
             return cls.build_hf_model()
         else:
