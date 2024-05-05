@@ -7,16 +7,6 @@ from langchain_google_vertexai import VertexAIModelGarden
 from transformers import pipeline
 
 
-class VertexAIModelGardenWrapper:
-
-    def __init__(self, vertexai_model):
-        self.vertexai_model = vertexai_model
-
-    def invoke(self, prompt):
-        return self.vertexai_model(
-            prompt=prompt
-        )
-
 class LargeLanguageModels:
     def __new__(cls, platform) -> Any:
         if platform == 'azure':
@@ -30,29 +20,23 @@ class LargeLanguageModels:
                 max_tokens=2048
             ).invoke
         elif platform == 'vertexai':
-            return cls.build_vertexai_model()
+            vertexai_model = VertexAIModelGarden(
+                endpoint_id=settings.VERTEXAI_LARGE_LANGUAGE_MODEL_ENDPOINT,
+                project=settings.GCP_PROJECT_ID,
+                allowed_model_args=[
+                    "temperature",
+                    "max_tokens",
+                    "top_p",
+                    "top_k",
+                    "raw_response"
+                ]
+            )
+
+            return vertexai_model.invoke
         elif platform == 'hf':
             return cls.build_hf_model()
         else:
             return None
-
-    @classmethod
-    def build_vertexai_model(cls):
-        vertexai_model = VertexAIModelGarden(
-            endpoint_id=settings.VERTEXAI_LARGE_LANGUAGE_MODEL_ENDPOINT,
-            project=settings.GCP_PROJECT_ID,
-            allowed_model_args=[
-                "temperature",
-                "max_tokens",
-                "top_p",
-                "top_k",
-                "raw_response"
-            ]
-        )
-
-        return VertexAIModelGardenWrapper(
-            vertexai_model=vertexai_model
-        ).invoke
 
     @classmethod
     def build_hf_model(cls):
